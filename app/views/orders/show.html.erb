@@ -4,9 +4,35 @@
     <h1>Order #<%= @order.id %></h1>
   </header>
 
+  <%@orderItems = LineItem.where(order_id: @order.id)%>
+
   <div class="order-summary jumbotron">
-    <h4>Thank you for your order!</h4>
+    <h3>Thank you for your order!</h3>
+    <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th colspan="2">Product</th>
+      <th>Unit Price</th>
+      <th>Quantity</th>
+      <th>Price</th>
+    </tr>
+    </thead>
+      <tbody>
+      <% @orderItems.each do |item| %>
+        <%= render 'item' , prod_id: item[:product_id], quantity: item[:quantity].to_i %>
+      <% end %>
+      </tbody>
+      </table>
+      <div>
+      Email:
+        <%= @order.email%>
+      </div>
+      <div>
+      Order Total:
+        <%= humanized_money_with_symbol @order.total_cents/100%>
+      </div>
   </div>
+
 
   <%= link_to "Continue Shopping", root_path, class: 'btn btn-lg btn-primary' %>
 
